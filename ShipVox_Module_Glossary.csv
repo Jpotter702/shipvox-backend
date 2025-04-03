@@ -1,0 +1,8 @@
+Module Name,Purpose,Inputs,Outputs,Dependencies,Status
+FedExAuth,Manages OAuth2 token retrieval and refresh for FedEx API,"Client credentials, token request",Bearer token,"requests, environment variables",Complete
+FedExRates,Sends rate requests to FedEx API and parses responses,"Normalized shipping data, bearer token",List of FedEx shipping options with cost and ETA,"FedExAuth, requests",Complete
+UPSRates,Sends rate requests to UPS API and parses responses,"Normalized shipping data, bearer token",List of UPS shipping options with cost and ETA,"UPSTokenManager (planned), requests",Planned
+ServiceNormalizer,Maps carrier-specific service names to normalized tiers for comparison,"Carrier service name, mapping CSV","Normalized service tier (e.g. Ground, 2-Day, Overnight)","pandas, normalized_services.csv",Planned
+RateComparer,Selects cheapest and fastest viable shipping options,List of rate objects from all carriers,Cheapest and cheapest/fastest shipping option,ServiceNormalizer,Planned
+LabelGenerator,Creates a shipping label using the selected carrier’s Ship API,"Selected service, shipper/recipient info, package data","Label PDF, QR code, tracking number","FedExAuth or UPSAuth, requests",Planned
+PickupScheduler,Schedules a package pickup with selected carrier,"Pickup location, contact info, date/time window",Pickup confirmation,"Carrier APIs, requests",Planned

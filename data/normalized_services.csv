@@ -1,0 +1,3 @@
+carrier,service_name,normalized_service
+fedex,FedEx Ground,Ground
+ups,UPS Ground,Ground
