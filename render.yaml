@@ -1,0 +1,37 @@
+# Exported from Render on 2025-04-04T03:59:55Z
+services:
+- type: web
+  name: shipvox-backend
+  runtime: python
+  repo: https://github.com/Jpotter702/shipvox-backend
+  branch: devbranch
+  plan: free
+  envVars:
+  - key: secrets.txt
+    sync: false
+  - key: UPS_ENVIRONMENT
+    sync: false
+  - key: FEDEX_ENVIRONMENT
+    sync: false
+  - key: UPS_ACCOUNT_NUMBER
+    sync: false
+  - key: UPS_CLIENT_SECRET
+    sync: false
+  - key: UPS_CLIENT_ID
+    sync: false
+  - key: FEDEX_ACCOUNT_NUMBER
+    sync: false
+  - key: FEDEX_CLIENT_SECRET
+    sync: false
+  - key: FEDEX_CLIENT_ID
+    sync: false
+  - key: SHIPVOX_LOG_FILE
+    sync: false
+  - key: SHIPVOX_LOG_LEVEL
+    sync: false
+  - key: SHIPVOX_ENVIRONMENT
+    sync: false
+  region: oregon
+  buildCommand: pip install -r requirements.txt
+  startCommand: python run.py
+version: "1"
