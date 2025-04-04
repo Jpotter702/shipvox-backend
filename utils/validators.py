@@ -3,7 +3,7 @@
 
 import re
 from typing import Dict, Any, Optional
-from ..utils.exceptions import ValidationError
+from utils.exceptions import ValidationError
 
 class ShippingValidator:
     """Validates shipping-related input data."""

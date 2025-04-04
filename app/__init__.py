@@ -1,6 +1,6 @@
 """ShipVox application module."""
 from fastapi import FastAPI
-from .config import Config
+from app.config import Config
 
 # Create FastAPI app instance
 app = FastAPI(
@@ -10,7 +10,7 @@ app = FastAPI(
 )
 
 # Import views to register routes
-from . import main
+from app import main
 
 # Export public interface
 __all__ = ['app', 'Config']

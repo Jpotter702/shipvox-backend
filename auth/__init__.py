@@ -4,10 +4,10 @@ from pathlib import Path
 import json
 import os
 
-from .fedex_auth import FedExAuth
-from .ups_auth import UPSAuth
-from ..utils.exceptions import ConfigurationError
-from ..utils.log import logger
+from auth.fedex_auth import FedExAuth
+from auth.ups_auth import UPSAuth
+from utils.exceptions import ConfigurationError
+from utils.log import logger
 
 class AuthManager:
     """Manages carrier authentication instances."""
@@ -30,6 +30,20 @@ class AuthManager:
         else:
             self._load_config_env()
             
+        self._initialize_auth()
+
+    def initialize_with_config(self, fedex_config: Dict, ups_config: Dict) -> None:
+        """
+        Initialize authentication with direct config dictionaries.
+        
+        Args:
+            fedex_config (Dict): FedEx configuration dictionary
+            ups_config (Dict): UPS configuration dictionary
+        """
+        self._config = {
+            "fedex": fedex_config,
+            "ups": ups_config
+        }
         self._initialize_auth()
         
     def _load_config_file(self, config_file: str) -> None:
@@ -111,3 +125,15 @@ class AuthManager:
 
 # Create a singleton instance
 auth_manager = AuthManager()
+
+def get_auth_manager() -> AuthManager:
+    """
+    Get the singleton auth manager instance.
+    
+    Returns:
+        AuthManager: The auth manager instance
+    """
+    global auth_manager
+    return auth_manager
+
+__all__ = ['AuthManager', 'auth_manager', 'get_auth_manager']

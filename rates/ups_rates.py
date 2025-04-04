@@ -4,7 +4,7 @@
 import aiohttp
 from typing import Dict, List, Optional
 from dataclasses import dataclass
-from ..auth.ups_auth import UPSAuth
+from auth.ups_auth import UPSAuth
 
 @dataclass
 class UPSRateRequest:

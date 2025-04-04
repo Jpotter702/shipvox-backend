@@ -4,14 +4,10 @@
 from typing import Dict, Any, Optional
 from datetime import datetime
 import base64
-from ups.ship import Ship
-from ups.track import Track
-from ups.void import Void
 import aiohttp
-from ..auth import auth_manager
-from ..utils.exceptions import LabelError
-
-from .label_creator import LabelCreator, LabelRequest, LabelResponse, Address, Package
+from auth import auth_manager
+from utils.exceptions import LabelError
+from labels.label_creator import LabelCreator, LabelRequest, LabelResponse, Address, Package
 
 class UPSLabelCreator(LabelCreator):
     """UPS implementation of the label creator using REST APIs."""

@@ -6,14 +6,14 @@ from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
 import os
 
-from . import app
-from .config import Config
-from ..auth import auth_manager
-from ..rates import RateComparer, ServiceNormalizer
-from ..labels import get_label_manager, Address, Package, LabelRequest
-from ..utils.log import logger
-from ..utils.validators import ShippingValidator
-from ..utils.exceptions import (
+from app import app
+from app.config import Config
+from auth import auth_manager
+from rates import RateComparer, ServiceNormalizer
+from labels import get_label_manager, Address, Package, LabelRequest
+from utils.log import logger
+from utils.validators import ShippingValidator
+from utils.exceptions import (
     ValidationError, AuthenticationError, APIError, 
     RateError, LabelError, ServiceMappingError
 )
@@ -27,7 +27,7 @@ if config.log_file:
     logger.add_file_handler(config.log_file)
 
 # Initialize auth manager
-auth_manager.initialize(config.fedex_config, config.ups_config)
+auth_manager.initialize_with_config(config.fedex_config, config.ups_config)
 
 # Initialize service normalizer
 service_normalizer = ServiceNormalizer()

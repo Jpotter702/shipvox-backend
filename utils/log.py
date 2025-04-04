@@ -43,6 +43,23 @@ class StructuredLogger:
             file_handler.setFormatter(file_formatter)
             self.logger.addHandler(file_handler)
     
+    def setLevel(self, level: str) -> None:
+        """
+        Set the logging level.
+        
+        Args:
+            level (str): The logging level (e.g., 'INFO', 'DEBUG', etc.)
+        """
+        level_map = {
+            'DEBUG': logging.DEBUG,
+            'INFO': logging.INFO,
+            'WARNING': logging.WARNING,
+            'ERROR': logging.ERROR,
+            'CRITICAL': logging.CRITICAL
+        }
+        numeric_level = level_map.get(level.upper(), logging.INFO)
+        self.logger.setLevel(numeric_level)
+    
     def _format_message(self, message: str, extra: Optional[Dict[str, Any]] = None) -> str:
         """
         Format a log message with extra data.
@@ -113,6 +130,23 @@ class StructuredLogger:
             extra (Optional[Dict[str, Any]]): Additional data to log
         """
         self.logger.exception(self._format_message(message, extra))
+
+    def add_file_handler(self, log_file: str) -> None:
+        """
+        Add a file handler to the logger.
+        
+        Args:
+            log_file (str): Path to the log file
+        """
+        log_path = Path(log_file)
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        file_formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setFormatter(file_formatter)
+        self.logger.addHandler(file_handler)
 
 # Create a default logger instance
 logger = StructuredLogger()

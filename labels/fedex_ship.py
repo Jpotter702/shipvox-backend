@@ -2,9 +2,9 @@ import aiohttp
 from datetime import datetime
 from typing import Dict, Any, Optional
 import base64
-from ..auth import auth_manager
-from ..utils.exceptions import LabelError
-from .label_creator import LabelCreator, LabelRequest, LabelResponse
+from auth import auth_manager
+from utils.exceptions import LabelError
+from labels.label_creator import LabelCreator, LabelRequest, LabelResponse, Address, Package
 
 class FedExLabelCreator(LabelCreator):
     """FedEx implementation of label creation using REST APIs."""

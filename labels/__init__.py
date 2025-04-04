@@ -1,11 +1,18 @@
 #   Init  
 # TODO: Implement this module
 
-from typing import Dict, Type
-from .label_creator import LabelCreator, LabelRequest, LabelResponse
+from typing import Dict, Type, Any
+from .label_creator import (
+    LabelCreator, 
+    LabelRequest, 
+    LabelResponse,
+    Address,
+    Package
+)
 from .fedex_ship import FedExLabelCreator
 from .ups_ship import UPSLabelCreator
-from ..auth import AuthManager
+from auth import AuthManager
+from auth import get_auth_manager
 
 class LabelManager:
     """Manages label creation for different carriers."""
@@ -110,7 +117,6 @@ def get_label_manager(auth_manager: AuthManager = None) -> LabelManager:
     global _label_manager
     if _label_manager is None:
         if auth_manager is None:
-            from ..auth import get_auth_manager
             auth_manager = get_auth_manager()
         _label_manager = LabelManager(auth_manager)
     return _label_manager
@@ -122,5 +128,7 @@ __all__ = [
     'LabelResponse',
     'FedExLabelCreator',
     'UPSLabelCreator',
-    'get_label_manager'
+    'get_label_manager',
+    'Address',
+    'Package'
 ]

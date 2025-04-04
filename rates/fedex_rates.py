@@ -4,7 +4,7 @@
 import aiohttp
 from typing import Dict, List, Optional
 from dataclasses import dataclass
-from ..auth.fedex_auth import FedExAuth
+from auth.fedex_auth import FedExAuth
 
 @dataclass
 class FedExRateRequest:

@@ -1,6 +1,12 @@
 # Run"""Run script for ShipVox application."""
-import uvicorn
+import os
+import sys
 from dotenv import load_dotenv
+import uvicorn
+
+# Add the project root directory to Python path
+project_root = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, project_root)
 
 # Load environment variables
 load_dotenv()
