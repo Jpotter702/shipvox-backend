@@ -80,7 +80,7 @@ class ShippingValidator:
         Raises:
             ValidationError: If address is invalid
         """
-        required_fields = ['street', 'city', 'state', 'zip_code']
+        required_fields = ['street1', 'city', 'state', 'zip_code']
         
         for field in required_fields:
             if field not in address:
