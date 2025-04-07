@@ -12,10 +12,11 @@ sys.path.insert(0, project_root)
 load_dotenv()
 
 if __name__ == "__main__":
+    port = int(os.getenv("PORT", "10000"))  # Use Render's PORT env var or default to 10000
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",
-        port=8000,
+        port=port,
         reload=True,
         log_level="info"
     )

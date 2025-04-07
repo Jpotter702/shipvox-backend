@@ -163,7 +163,11 @@ async def get_rates(request: RateRequest) -> RateResponse:
         all_options = rate_comparer.get_all_options()
         
         if not all_options:
-            raise APIError("No rates available from any carrier")
+            raise APIError(
+                carrier="SYSTEM",
+                status_code=404,
+                message="No rates available from any carrier"
+            )
         
         return RateResponse(
             cheapest_option=cheapest,
