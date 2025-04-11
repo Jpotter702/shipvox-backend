@@ -5,6 +5,10 @@ import aiohttp
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 from auth.fedex_auth import FedExAuth
+from .service import RateService
+from .models import RateRequest, RateResponse
+from .service_normalizer import ServiceNormalizer
+from datetime import datetime, timedelta
 
 @dataclass
 class FedExRateRequest:
@@ -24,6 +28,52 @@ class FedExRateResponse:
     cost: float
     estimated_days: int
     delivery_date: str
+
+class FedExRateService(RateService):
+    """FedEx rate service implementation."""
+    
+    def __init__(self, api_key: str, api_secret: str):
+        self.api_key = api_key
+        self.api_secret = api_secret
+        self.normalizer = ServiceNormalizer()
+    
+    async def validate_request(self, request: RateRequest) -> None:
+        """Validate FedEx-specific requirements."""
+        # FedEx specific validations
+        if request.weight > 150:  # FedEx max weight in lbs
+            raise ValueError("Weight exceeds FedEx maximum of 150 lbs")
+        
+        # Validate dimensions
+        if request.dimensions.length > 108 or request.dimensions.width > 108 or request.dimensions.height > 108:
+            raise ValueError("Dimensions exceed FedEx maximum of 108 inches")
+    
+    async def get_rates(self, request: RateRequest) -> List[RateResponse]:
+        """Get FedEx shipping rates."""
+        await self.validate_request(request)
+        
+        # TODO: Implement actual FedEx API call
+        # This is a mock implementation
+        rates = []
+        
+        # Example rates
+        services = [
+            ("FedEx Ground", "FEDEX_GROUND", 25.99, 3),
+            ("FedEx 2Day", "FEDEX_2_DAY", 45.99, 2),
+            ("FedEx Overnight", "FEDEX_OVERNIGHT", 65.99, 1)
+        ]
+        
+        for service_name, service_code, cost, days in services:
+            delivery_date = (datetime.now() + timedelta(days=days)).strftime("%Y-%m-%d")
+            rates.append(RateResponse(
+                carrier="FedEx",
+                service_name=service_name,
+                service_code=service_code,
+                cost=cost,
+                estimated_days=days,
+                delivery_date=delivery_date
+            ))
+        
+        return rates
 
 class FedExRates:
     """Handles rate requests to the FedEx API."""
