@@ -1,19 +1,31 @@
-class TokenStoreError(Exception):
-    """Base exception for token store errors"""
+class AuthenticationError(Exception):
+    """Base exception for authentication errors"""
     pass
 
-class TokenNotFoundError(TokenStoreError):
-    """Raised when tokens are not found"""
+class TokenNotFoundError(AuthenticationError):
+    """Raised when token is not found"""
     pass
 
-class TokenEncryptionError(TokenStoreError):
-    """Raised when encryption/decryption fails"""
+class TokenStoreError(AuthenticationError):
+    """Raised when token store operation fails"""
     pass
 
-class TokenExpiredError(TokenStoreError):
-    """Raised when token is expired"""
+class TokenExpiredError(AuthenticationError):
+    """Raised when token has expired"""
     pass
 
-class TokenValidationError(TokenStoreError):
+class TokenValidationError(AuthenticationError):
     """Raised when token validation fails"""
+    pass
+
+class TokenEncryptionError(AuthenticationError):
+    """Raised when token encryption/decryption fails"""
+    pass
+
+class CarrierNotSupportedError(AuthenticationError):
+    """Raised when requested carrier is not supported"""
+    pass
+
+class InvalidAuthFlowError(AuthenticationError):
+    """Raised when invalid auth flow is requested for carrier"""
     pass 
