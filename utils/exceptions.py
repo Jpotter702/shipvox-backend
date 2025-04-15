@@ -40,3 +40,21 @@ class ConfigurationError(ShipVoxError):
 class ServiceMappingError(ShipVoxError):
     """Raised when there's an issue with service name mappings."""
     pass
+
+class FedExAPIError(LabelError):
+    """Exception for FedEx API specific errors."""
+    def __init__(self, message: str, api_response: dict = None):
+        super().__init__(message)
+        self.api_response = api_response
+
+class PackageError(ValidationError):
+    """Exception for package-related validation errors."""
+    pass
+
+class AddressError(ValidationError):
+    """Exception for address-related validation errors."""
+    pass
+
+class ServiceError(ValidationError):
+    """Exception for service-related validation errors."""
+    pass
