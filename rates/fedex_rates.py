@@ -8,6 +8,7 @@ from auth.fedex_auth import FedExAuth
 from .service import RateService
 from .models import RateRequest, RateResponse
 from .service_normalizer import ServiceNormalizer
+from .credentials import CredentialsManager
 from datetime import datetime, timedelta
 
 @dataclass
@@ -32,13 +33,20 @@ class FedExRateResponse:
 class FedExRateService(RateService):
     """FedEx rate service implementation."""
     
-    def __init__(self, api_key: str, api_secret: str):
-        self.api_key = api_key
-        self.api_secret = api_secret
+    def __init__(self):
+        self.credentials_manager = CredentialsManager()
         self.normalizer = ServiceNormalizer()
+    
+    @property
+    def is_active(self) -> bool:
+        """Check if FedEx is active (has all required credentials)."""
+        return self.credentials_manager.is_carrier_active("FedEx")
     
     async def validate_request(self, request: RateRequest) -> None:
         """Validate FedEx-specific requirements."""
+        if not self.is_active:
+            raise ValueError("FedEx is not configured. Please check your credentials.")
+            
         # FedEx specific validations
         if request.weight > 150:  # FedEx max weight in lbs
             raise ValueError("Weight exceeds FedEx maximum of 150 lbs")
@@ -49,6 +57,9 @@ class FedExRateService(RateService):
     
     async def get_rates(self, request: RateRequest) -> List[RateResponse]:
         """Get FedEx shipping rates."""
+        if not self.is_active:
+            return []
+            
         await self.validate_request(request)
         
         # TODO: Implement actual FedEx API call

@@ -1,13 +1,16 @@
 from typing import Dict
 import requests
 from urllib.parse import urlencode
+from .base import TokenValidator
 from ..carrier_registry import CarrierAuthProvider
 from ..exceptions import AuthenticationError
 
-class UPSAuthProvider(CarrierAuthProvider):
+class UPSAuthProvider(CarrierAuthProvider, TokenValidator):
     """UPS authentication provider using OAuth authorization code flow"""
     
     def __init__(self, client_id: str, client_secret: str, redirect_uri: str, sandbox: bool = False):
+        CarrierAuthProvider.__init__(self)
+        TokenValidator.__init__(self)
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
@@ -39,7 +42,9 @@ class UPSAuthProvider(CarrierAuthProvider):
                 headers={"Content-Type": "application/x-www-form-urlencoded"}
             )
             response.raise_for_status()
-            return response.json()
+            token_data = response.json()
+            self._update_token(token_data)
+            return token_data
         except Exception as e:
             raise AuthenticationError(f"UPS token exchange failed: {str(e)}")
     
@@ -57,6 +62,17 @@ class UPSAuthProvider(CarrierAuthProvider):
                 headers={"Content-Type": "application/x-www-form-urlencoded"}
             )
             response.raise_for_status()
-            return response.json()
+            token_data = response.json()
+            self._update_token(token_data)
+            return token_data
         except Exception as e:
-            raise AuthenticationError(f"UPS token refresh failed: {str(e)}") 
+            raise AuthenticationError(f"UPS token refresh failed: {str(e)}")
+    
+    def get_auth_headers(self) -> Dict[str, str]:
+        """Get authentication headers for UPS API requests"""
+        token = self.get_current_token()
+        return {
+            "Authorization": f"Bearer {token['access_token']}",
+            "Content-Type": "application/json",
+            "x-merchant-id": self.client_id
+        }    
